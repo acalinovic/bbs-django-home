@@ -1,0 +1,22 @@
+.bbs-menu {
+    min-width: 80px;
+    min-height: 18px;
+    margin: 0;
+    padding: 2px;
+}
+.bbs-sub-menu {
+    min-width: 80px;
+    min-height: 18px;
+    margin: 0;
+    padding: 2px;
+    background-color: lightgrey;
+    color: black;
+}
+.bbs-menu-command {
+        background-color: lightgrey;
+    color: black;
+
+}
+.bbs-menu-box {
+    display: none;
+}

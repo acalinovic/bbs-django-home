@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+{% load static %}
+{% load bootstrap4 %}
+{% load fontawesome_5 %}
+<html lang="en">
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='full' %}
+    {% fontawesome_5_static %}
+
+    {% include 'home/fragments/meta.html' %}
+    {% include 'home/fragments/stylesheets.html' %}
+
+    {% comment %}
+    {% include 'home/fragments/jspdf.html' %}
+    {% endcomment %}
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+    {% block style %}
+    {% endblock %}
+
+    {% block head %}
+    {% endblock %}
+</head>
+<body class="bbs-c-column">
+<header id="app-header" class="">
+    {% block header %}
+        {% include 'home/fragments/app_nav_bar.html' %}
+    {% endblock %}
+</header>
+<div id="main-wrapper" class="bbs-c-row bbs-i-mod-h-fullspace">
+    <aside id="app-left-aside" class="bbs-c-column bg-info">
+        {% block left-aside %}
+            <!--button onclick="to_pdf()" class="button">TO PDF</button-->
+        {% endblock %}
+    </aside>
+    <div id="content-wrapper" class="bbs-c-column bbs-i-mod-h-fullspace">
+        <section id="main-header" class="bbs-c-row">
+            {% block main-header %}{% endblock %}
+        </section>
+        <main id="main-content" class="bbs-c-row bbs-c-mod-wrap bbs-i-mod-h-fullspace bbs-c-mod-justify-content-center">
+            {% block main %}toto{% endblock %}
+        </main>
+        <section id="main-footer" class="">
+            {% block main-footer %}{% endblock %}
+        </section>
+    </div>
+    <aside id="app-right-aside" class="bbs-i-mod-fix-grow">
+        {% block right-aside %}{% endblock %}
+    </aside>
+</div>
+<footer id="app-footer" class="bbs-c-row fixed-bottom bg-dark text-light bbs-c-mod-justify-content-center">
+    {% block footer %}<p>toto</p>{% endblock %}
+</footer>
+
+{% block scripts %}{% endblock %}
+    <script type="text/javascript" src="{% static 'bbs/js/bootstrap4-dropdown-ml-hack-hover.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bbs/js/bootstrap4-dropdown-ml-hack.js' %}"></script>
+    <script>
+        function to_pdf() {
+            var margin = {
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0
+            };
+
+            var doc = new jsPDF();
+            console.log(doc);
+            var elementHTML = $('#main-content').html();
+            var specialElementHandlers = {
+                '#main-content': function (element, renderer) {
+                    return true;
+                }
+            };
+            doc.fromHTML(elementHTML, 0, 0, {
+                    'width': 210, // max width of content on PDF
+                    'elementHandlers': specialElementHandlers
+                },
+                function (bla) {
+                    //doc.save('saveInCallback.pdf');
+                    doc.output('dataurl');
+                },
+                margin);
+
+    // Save the PDF
+            //doc.output('dataurl');
+            //doc.save('test.pdf');
+
+        }
+    </script>
+</body>
+</html>

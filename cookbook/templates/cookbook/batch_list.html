@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}Cookbook Batches List{% endblock %}
+{% block main-header %}
+    <h3>Gene selection</h3>
+{% endblock %}
+{% block main %}
+    <div id="wrapper" class="bbs-c-column bbs-i-mod-h-fullspace">
+        <div id="gene_button_list" class="bbs-c-row bbs-c-mod-wrap bbs-c-mod-justify-content-center">
+            {% for gene in gene_list %}
+                <a href="{% url 'batch_add' gene.id %}">
+                    <button style="min-width: 150px" class="btn btn-lg btn-primary m-2
+                {% for batch in batches %}
+                    {% if gene.name == batch.gene.name %}
+                        d-none
+                    {% endif %}
+                {% endfor %}
+                          "
+                            id="gene_add_{{ gene.id }}"
+                            name="{{ gene.name }}"
+                            onclick="hideGene({{ gene.id }})">
+                        {{ gene.name|truncatechars:7 }}
+                    </button>
+                </a>
+            {% endfor %}
+        </div>
+        <div id="batch_list" class="bbs-c-row bbs-c-mod-wrap">
+            {% for batch in batch_list %}
+                <div class="input-group bbs-c-row w-25">
+                    <span class="input-group-text" style="min-width: 200px;">{{ batch.gene.name }}</span>
+                    <div class="bbs-i-mod-grow-1"></div>
+                    <span class="input-group-text text-center" style="min-width: 30px;"> X </span>
+                    <input id="batch_{{ batch.id }}" type="number" class="form-control" style="max-width: 80px;"
+                           value="{{ batch.quantity }}">
+                    <div class="input-group-append" id="button-addon4">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <!--a href="del/{{ batch.id }}"-->
+                            <a href="{% url 'batch_del' batch.id %}">
+                                <button type="button" class="btn btn-outline-secondary"><i
+                                        class="fas fa-trash"></i>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
+{% block main-footer %}
+    <a href="{% url 'admin:cookbook_batch_changelist' %}">admin</a>
+{% endblock %}
+{% block scripts %}
+    <script>
+        /**
+         function hideGene(id) {
+            var identifier = "#" + "gene_add_" + id;
+            var button = $(identifier)
+            button.toggleClass("d-none");
+        }
+         */
+        function set(id) {
+            var identifier = "#" + 'batch_' + id;
+            var input = $(identifier);
+            var icon = $("#" + "quantity_set_" + id);
+            input.load("set/" + id + "/" + input.val());
+            icon.toggleClass("text-success");
+        }
+
+        $("input[type='number']").change(function() {
+            var id = this.id.replace('batch_', '')
+            console.log( this.value + ' ' + this.id.replace('batch_', '') );
+            $.get("set/" + id + "/" + this.value);
+            }
+        );
+    </script>
+{% endblock %}
+

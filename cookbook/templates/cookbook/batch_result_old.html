@@ -1,0 +1,74 @@
+{% extends 'home/home.html' %}
+{% block style %}
+    .updated {
+        background-color: yellow;
+    }
+    .set_button {
+        font-size: 0.5em;
+        padding: 0;
+        margin: 0;
+    }
+    .bi_value {
+        text-align: right;
+        padding: 0;
+        margin: 0;
+        border: none;
+    }
+{% endblock %}
+{% block main %}
+    <div id="content_wrapper" class="bbs-c-column">
+        <div class="bbs-c-row bbs-c-mod-wrap ">
+            {% for batch, items in batch_items.items %}
+                <div class="card container-sm w-25">
+                    <div class="card-header font-weight-bold bg-primary text-white ">
+                        {{ batch }} X {{ items.first.batch.quantity }}
+                        - ({{ checksums|get_item:batch }} W/ h2O)
+                        - vol total : {{ items.first.batch.quantity|add:"4" }}
+                    </div>
+                    <ol class="list-group">
+                        {% for item in items %}
+                            <li class="list-group-item">
+                                <span style="float: left;min-width: 200px;">{{ item.ingredient|ljust:"15" }}</span>
+                                <span>
+                    {% if item.is_manual == 0 %}
+                        <input class="bi_value" id="batch_item_{{ item.id }}" style="max-width: 60px; font-size: 0.8em;"
+                               type="number"
+                               value="{{ item.computed_vol|floatformat:2 }}"> µl
+                    {% else %}
+                        <input class="bi_value updated" id="batch_item_{{ item.id }}"
+                               style="max-width: 60px; font-size: 0.8em;" type="number"
+                               value="{{ item.computed_vol|floatformat:2 }}"> µl
+
+                    {% endif %}
+                </span>
+                                <button class="set_button btn btn-danger" onclick="setValue({{ item.id }})"><i
+                                        class="fas fa-exclamation-circle"></i></button>
+                            </li>
+                        {% endfor %}
+                    </ol>
+                    <div class="card-footer">{{ items.first.batch.gene.program }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+{% block left-aside %}
+    <a href="{% url 'batch_report' %}">
+        <button class="btn btn-lg btn-dark m-2">Print</button>
+    </a>
+{% endblock %}
+{% block scripts %}
+    <script>
+        function setValue(id) {
+            var identifier = "#" + 'batch_item_' + id;
+            var input = $(identifier);
+            input.addClass("updated");
+            input.load("setitem/" + id + "/" + input.val());
+            $("HTML").load("process");
+        }
+
+        function update(item_id) {
+
+        }
+    </script>
+{% endblock %}

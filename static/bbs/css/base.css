@@ -1,0 +1,84 @@
+a {
+    text-decoration: none;
+    color: white;
+}
+
+html {
+    /* Setup for sticking divs */
+    position: relative;
+    min-height: 100%;
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    width: auto;
+    background-color: white;
+    font-family: sans-serif;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+.dropdown-hover-all .dropdown-menu, .dropdown-hover > .dropdown-menu {
+        margin: 0
+    }
+
+.dummy {
+    width: 280px;
+    height: 280px;
+    margin: 0;
+    border: solid white 10px;
+    background-color: #0b93d5;
+    color: white;
+    font-size: 2em;
+}
+
+#app-left-aside {
+    min-width: 120px;
+    background-color: gray;
+}
+
+#app-right-aside {
+    min-width: 120px;
+    background-color: gray;
+}
+
+#app-header {
+    min-height: 40px;
+    margin: 0;
+    padding: 0;
+}
+
+#app-nav-bar {
+    height: 40px;
+}
+
+#app-footer {
+    height: 20px;
+    background-color: black;
+}
+
+#main-wrapper {
+    color: black;
+    margin-bottom: 20px;
+    min-height: auto;
+    padding: 0;
+}
+
+#main-header {
+    //padding: 10px;
+    min-height: 40px;
+    background-color: darkgray;
+    color: white;
+}
+
+#main-content {
+    min-height: auto;
+}
+
+#main-footer {
+    min-height: 40px;
+    background-color: darkgray;
+}

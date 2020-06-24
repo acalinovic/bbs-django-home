@@ -1,0 +1,142 @@
+.bbs-body-wrapper {
+    width: 100%;
+    min-height: 100%;
+    background-color: #baec7e;
+}
+.bbs-c-row {
+    display: flex;
+}
+.bbs-c-row-rev {
+    display: flex;
+    flex-direction: row-reverse;
+}
+.bbs-c-column {
+    display: flex;
+    flex-direction: column;
+}
+.bbs-c-column-rev {
+    display: flex;
+    flex-direction: column-reverse;
+}
+.bbs-c-mod-wrap {
+    flex-wrap: wrap;
+}
+.bbs-c-mod-wrap-rev {
+    flex-wrap: wrap-reverse;
+}
+.bbs-c-mod-justify-content-center {
+    justify-content: center;
+}
+.bbs-c-mod-justify-content-start {
+    justify-content: flex-start;
+}
+.bbs-c-mod-justify-content-end {
+    justify-content: flex-end;
+}
+.bbs-c-mod-justify-content-around {
+    justify-content: space-around;
+}
+.bbs-c-mod-justify-content-between {
+    justify-content: space-between;
+}
+.bbs-c-mod-align-items-center {
+    align-items: center;
+}
+.bbs-c-mod-align-items-start {
+    align-items: flex-start;
+}
+.bbs-c-mod-align-items-end {
+    align-items: flex-end;
+}
+.bbs-c-mod-align-items-baseline {
+    align-items: baseline;
+}
+.bbs-c-mod-align-content-center {
+    align-content: center;
+}
+.bbs-c-mod-align-content-around {
+    align-content: space-around;
+}
+.bbs-c-mod-align-content-start {
+    align-content: flex-start;
+}
+.bbs-c-mod-align-content-end {
+    align-content: flex-end;
+}
+.bbs-i-mod-order-1 {
+    order: 1;
+}
+.bbs-i-mod-order-2 {
+    order: 2;
+}
+.bbs-i-mod-order-3 {
+    order: 3;
+}
+.bbs-i-mod-order-4 {
+    order: 4;
+}
+.bbs-i-mod-order-5 {
+    order: 5;
+}
+.bbs-i-mod-order-6 {
+    order: 6;
+}
+.bbs-i-mod-order-7 {
+    order: 7;
+}
+.bbs-i-mod-grow-1 {
+    flex-grow: 1;
+}
+.bbs-i-mod-grow-2 {
+    flex-grow: 2;
+}
+.bbs-i-mod-grow-3 {
+    flex-grow: 3;
+}
+.bbs-i-mod-grow-4 {
+    flex-grow: 4;
+}
+.bbs-i-mod-grow-5 {
+    flex-grow: 5;
+}
+.bbs-i-mod-grow-6 {
+    flex-grow: 6;
+}
+.bbs-i-mod-grow-7 {
+    flex-grow: 7;
+}
+.bbs-i-mod-grow-8 {
+    flex-grow: 8;
+}
+.bbs-i-mod-grow-9 {
+    flex-grow: 9;
+}
+.bbs-i-mod-grow-10 {
+    flex-grow: 10;
+}
+.bbs-i-mod-fix-grow {
+    flex-grow: 0;
+}
+.bbs-i-mod-max-grow {
+    flex-grow: 999;
+}
+.bbs-i-mod-max-shrink {
+    flex-shrink: 999;
+}
+.bbs-i-mod-align-self-center {
+    align-self: center;
+}
+.bbs-i-mod-align-self-start {
+    align-self: flex-start;
+}
+.bbs-i-mod-align-self-end {
+    align-self: flex-end;
+}
+.bbs-i-mod-v-fullspace {
+    flex: 1 1 auto;
+    width: auto;
+}
+.bbs-i-mod-h-fullspace {
+    flex: 1 1 auto;
+    height: auto;
+}

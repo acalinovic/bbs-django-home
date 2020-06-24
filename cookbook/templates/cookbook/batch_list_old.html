@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block main %}
+    <div class="container mt-4">
+        {% for gene in gene_list %}
+            <a href="{% url 'batch_add' gene_id=gene.id %}">
+                <button style="min-width: 150px" class="btn btn-lg btn-primary m-2
+                {% for batch in batches %}
+                    {% if gene.name == batch.gene.name %}
+                        d-none
+                    {% endif %}
+                {% endfor %}
+                          "
+                        id="gene_add_{{ gene.id }}"
+                        name="{{ gene.name }}"
+                        onclick="hideGene({{ gene.id }})">{{ gene.name }}
+                </button>
+            </a>
+        {% endfor %}
+        <ol class="mt-5">
+            {% for batch in batch_list %}
+                <li>
+                    <div class="input-group">
+                        <span class="input-group-text" style="min-width: 200px;">{{ batch.gene.name }}</span>
+                        <span class="input-group-text text-center" style="min-width: 30px;"> X </span>
+                        <input id="batch_{{ batch.id }}" type="number" class="form-control" style="max-width: 80px;"
+                               value="{{ batch.quantity }}">
+                        <div class="input-group-append" id="button-addon4">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+
+                                <!--button type="button" class="btn btn-outline-secondary" onclick="set({{ batch.id }})"><i
+                                        id="quantity_set_{{ batch.id }}"
+                                        class="fas fa-chevron-circle-down"></i></button-->
+                                <a href="del/{{ batch.id }}">
+                                    <button type="button" class="btn btn-outline-secondary"><i class="fas fa-trash"></i>
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ol>
+        <a href="{% url 'batch_process' %}">
+            <button class="btn btn-outline-primary mt-3">PROCESS</button>
+        </a>
+    </div>
+
+{% endblock %}
+{% block scripts %}
+    <script>
+        function hideGene(id) {
+            var identifier = "#" + "gene_add_" + id;
+            var button = $(identifier)
+            button.toggleClass("d-none");
+        }
+
+        function set(id) {
+            var identifier = "#" + 'batch_' + id;
+            var input = $(identifier);
+            var icon = $("#" + "quantity_set_" + id);
+            input.load("set/" + id + "/" + input.val());
+            icon.toggleClass("text-success");
+        }
+
+        $("input[type='number']").change(function() {
+            var id = this.id.replace('batch_', '')
+            console.log( this.value + ' ' + this.id.replace('batch_', '') );
+            $.get("set/" + id + "/" + this.value);
+            }
+        );
+    </script>
+{% endblock %}
+

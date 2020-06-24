@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block main %}
+    <form method="post">
+        <div id="login_form_group" class="container">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary" type="submit">Login</button>
+        </div>
+        <script>
+            $("#id_username").addClass("form-control")
+                              .val('admin');
+            $("#id_password").addClass("form-control")
+                              .val('albkeelboz');
+            $("#login_form_group")
+                .addClass("mt-3")
+                .css("width", "500");
+            $("#login_form_group ul li").addClass("alert alert-danger");
+            $("#login_form_group ul")
+                .css("list-style", "none")
+                .addClass("mr-4")
+                .addClass("pr-2")
+                .css("z-offset", "2000");
+        </script>
+    </form>
+{% endblock %}

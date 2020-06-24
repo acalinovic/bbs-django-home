@@ -1,0 +1,9 @@
+<h2 class="text-danger text-center">Requested action does'nt exists yet</h2>
+{{ request}}
+<br />
+<h3 class="text-center">Existings functions are :</h3>
+<ul class="list-inline">
+{% for file in tree %}
+<li class="text-body">{{ file }}</li>
+{% endfor %}
+</ul>

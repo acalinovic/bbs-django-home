@@ -1,0 +1,50 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Boris Acalinovic for BlueBearSolutions">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+    <script defer src="{% static 'fontawesome/js/all.js' %}"></script>
+    <script src="{% static 'bootstrap/js/jquery.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.js' %}"></script>
+    <style>
+    html { /* Setup for sticking divs */
+        position: relative;
+        min-height: 100%;
+    }
+    body::-webkit-scrollbar, main::-webkit-scrollbar { /* WebKit for hiding scrollbars*/
+        width: 0;
+        height: 0;
+    }
+    </style>
+    {% block head %}
+    {% endblock %}
+</head>
+<body class="container pb-3">
+<form method="post">
+    <div id="login_form_group" class="container">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary" type="submit">Login</button>
+    </div>
+    <script>
+    $("#id_username").addClass("form-control");
+    $("#id_password").addClass("form-control");
+    $("#login_form_group")
+        .addClass("mt-3")
+        .css("width", "500");
+    $("#login_form_group ul li").addClass("alert alert-danger");
+    $("#login_form_group ul")
+        .css("list-style", "none")
+        .addClass("mr-4")
+        .addClass("pr-2");
+</script>
+
+</form>
+</body>
+</html>

@@ -1,0 +1,80 @@
+{% load static %}
+{% block head %}
+{% endblock %}
+{% block header %}
+    <nav id="app-nav-bar" class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'home' %}">Home<span class="sr-only">(current)</span></a>
+                </li>
+                <!--li class="nav-item dropdown dropdown-hover">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hover</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown01">
+                        <a class="dropdown-item" href="#">Single App</a>
+                        <a class="dropdown-item" href="#">Multiple Works</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Disctribution</a>
+                    </div>
+                </li-->
+                {% for menu in menus %}
+                    {% if not menu.gui_menu %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="{{ menu.name }}" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">{{ menu.label }}</a>
+                        <div class="dropdown-menu" aria-labelledby="{{ menu.name }}">
+
+                            {% for sub_menu in menu.sub_menus.all %}
+                                <div class="dropdown dropright">
+                                    <a class="dropdown-item dropdown-toggle" href="#" id="{{ sub_menu.name }}"
+                                       data-toggle="dropdown" aria-haspopup="true"
+                                       aria-expanded="false">{{ sub_menu.label }}</a>
+                                    <div class="dropdown-menu" aria-labelledby="{{ sub_menu.name }}">
+                                        <!--div class="dropdown-divider"></div-->
+                                        {% for sub_sub_menu in sub_menu.sub_menus.all %}
+                                            <div class="dropdown dropright">
+                                                <a class="dropdown-item dropdown-toggle" href="#"
+                                                   id="{{ sub_sub_menu.name }}"
+                                                   data-toggle="dropdown" aria-haspopup="true"
+                                                   aria-expanded="false">{{ sub_sub_menu.label }}</a>
+                                                <div class="dropdown-menu" aria-labelledby="{{ sub_sub_menu.name }}">
+                                                    {% for command in sub_sub_menu.commands.all %}
+                                                        <a class="dropdown-item"
+                                                           href="{% url command.command %}">{{ command.label }}</a>
+                                                    {% endfor %}
+
+                                                    <!--div class="dropdown-divider"></div-->
+                                                </div>
+                                            </div>
+                                            <!--div class="dropdown-divider"></div-->
+                                        {% endfor %}
+                                        {% if sub_menu.commands.all.first %}
+                                            <div class="dropdown-divider"></div>
+                                        {% endif %}
+                                        {% for command in sub_menu.commands.all %}
+                                            <a class="dropdown-item"
+                                               href="{% url command.command %}">{{ command.label }}</a>
+                                        {% endfor %}
+
+                                    </div>
+                                </div>
+                                <!--div class="dropdown-divider"></div-->
+                            {% endfor %}
+                            {% if menu.commands.all.first %}
+                                <div class="dropdown-divider"></div>
+                            {% endif %}
+
+                            {% for command in menu.commands.all %}
+                                <a class="dropdown-item" href="{% url command.command %}">{{ command.label }}</a>
+                            {% endfor %}
+                        </div>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                <!--li class="nav-item active">
+                    <a class="nav-link" href="https://github.com/dallaslu/bootstrap-4-multi-level-dropdown">View on Github</a>
+                </li-->
+            </ul>
+        </div>
+    </nav>
+{% endblock %}

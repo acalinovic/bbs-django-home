@@ -1,0 +1,5 @@
+Django~=3.1a1
+reportlab~=3.5.42
+django-debug-toolbar~=3.0a1
+
+Kivy~=2.0.0rc3
