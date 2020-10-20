@@ -1,14 +1,41 @@
 {% extends 'base.html' %}
 {% block title %}Cookbook Batches List{% endblock %}
+{% block style %}
+<style>
+#main-footer a:hover {
+    text-decoration: none;
+    color: white;
+    font-weight: bolder;
+}
+</style>
+{% endblock %}
 {% block main-header %}
-    <h3>Gene selection</h3>
+<form class="form-inline align-self-center">
+  <label class="sr-only" for="gene_filter">Filter</label>
+  <div class="input-group mb-2 mr-lg-2">
+    <div class="input-group-prepend">
+      <div class="input-group-text">Filter</div>
+    </div>
+    <input id="gene_filter" type="text" class="form-control col-lg-12" placeholder="Type some chars...">
+      <div class="input-group-prepend">
+          <button id="filter_reset_button" class="btn btn-danger"><i class="fas fa-eraser"></i></button>
+      </div>
+  </div>
+</form>
+{% endblock %}
+{% block left-aside %}
+    {% if batch_list %}
+    <a href="{% url 'batch_del_all' %}" class="bbs-c-row bbs-i-mod-h-fullspace">
+        <button class="btn btn-sm btn-danger bbs-i-mod-h-fullspace" ><i style="font-size: 5em; max-height: 120px" class="fas fa-trash"></i></button>
+    </a>
+    {% endif %}
 {% endblock %}
 {% block main %}
     <div id="wrapper" class="bbs-c-column bbs-i-mod-h-fullspace">
         <div id="gene_button_list" class="bbs-c-row bbs-c-mod-wrap bbs-c-mod-justify-content-center">
             {% for gene in gene_list %}
                 <a href="{% url 'batch_add' gene.id %}">
-                    <button style="min-width: 150px" class="btn btn-lg btn-primary m-2
+                    <button style="min-width: 150px" class="gene_selector btn btn-lg btn-primary m-2
                 {% for batch in batches %}
                     {% if gene.name == batch.gene.name %}
                         d-none
@@ -25,9 +52,9 @@
         </div>
         <div id="batch_list" class="bbs-c-row bbs-c-mod-wrap">
             {% for batch in batch_list %}
-                <div class="input-group bbs-c-row w-25">
-                    <span class="input-group-text" style="min-width: 200px;">{{ batch.gene.name }}</span>
-                    <div class="bbs-i-mod-grow-1"></div>
+                <div class="input-group bbs-c-row w-50 pr-3 pl-3">
+                    <span class="input-group-text bbs-i-mod-grow-1" style="min-width: 200px;">{{ batch.gene.name }}</span>
+                    <!--div class="bbs-i-mod-grow-1"></div-->
                     <span class="input-group-text text-center" style="min-width: 30px;"> X </span>
                     <input id="batch_{{ batch.id }}" type="number" class="form-control" style="max-width: 80px;"
                            value="{{ batch.quantity }}">
@@ -42,13 +69,23 @@
                         </div>
                     </div>
                 </div>
+                {% include 'cookbook/fragments/batch_init.html' %}
             {% endfor %}
         </div>
     </div>
 
 {% endblock %}
+{% block right-aside %}
+    {% if batch_list %}
+    <a href="{% url 'batch_process' %}" class="bbs-c-row bbs-i-mod-h-fullspace text-success">
+        <button class="btn btn-sm btn-dark bbs-i-mod-h-fullspace"><i style="font-size: 5em" class="fas fa-caret-square-right"></i></button>
+    </a>
+    {% else %}
+        <button class="btn btn-sm btn-dark bbs-i-mod-h-fullspace disabled" ><i style="font-size: 5em; max-height: 120px" class="fas fa-caret-square-right"></i></button>
+    {% endif %}
+{% endblock %}
 {% block main-footer %}
-    <a href="{% url 'admin:cookbook_batch_changelist' %}">admin</a>
+    <a href="{% url 'admin:cookbook_batch_changelist' %}" style="display: flex" class="bbs-c-mod-justify-content-center align-items-center">Edit Genes<i class="fas fa-pencil-alt pl-1"></i></a>
 {% endblock %}
 {% block scripts %}
     <script>
@@ -68,11 +105,31 @@
         }
 
         $("input[type='number']").change(function() {
-            var id = this.id.replace('batch_', '')
+            var id = this.id.replace('batch_', '');
             console.log( this.value + ' ' + this.id.replace('batch_', '') );
             $.get("set/" + id + "/" + this.value);
             }
         );
+    </script>
+    <script>
+        const gene_filter = $("#gene_filter");
+        const filter_reset = $("#filter_reset_button");
+        const gene_list = $(".gene_selector");
+        gene_filter.keyup(function() {
+            for (item of gene_list) {
+                if (! item.name.toLowerCase().match(gene_filter.val().toLowerCase())) {
+                    $("#" + item.id).hide();
+                } else {
+                    $("#" + item.id).show();
+                }
+            }
+        });
+        filter_reset.click(function() {
+            gene_filter.value = '';
+            for (item of gene_filter) {
+                $("#" + item.id).show();
+            }
+        });
     </script>
 {% endblock %}
 

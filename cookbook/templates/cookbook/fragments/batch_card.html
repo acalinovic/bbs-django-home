@@ -1,1 +1,11 @@
-{%  %}
+<div class="bbs-c-row mb-1 bg-light">
+    <span style="display: flex" class="w-50">ingedient</span>
+    <span style="display: flex" class="w-50">volume</span>
+</div>
+{% for i in batch.batch_items.all %}
+    <div class="bbs-c-row">
+        <span style="display: flex" class="w-50">{{ i.ingredient.name }}</span>
+        <span style="display: flex"
+              class="w-50">{{ i.computed_vol|default_if_none:0|rjust:15 }}</span>
+    </div>
+{% endfor %}

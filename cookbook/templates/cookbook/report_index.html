@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% block title %}
+    Report Index
+{% endblock %}
+{% block main-header %}
+    <form class="form-inline align-self-center">
+        <label class="sr-only" for="gene_filter">Filter</label>
+        <div class="input-group mb-2 mr-lg-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text">Filter</div>
+            </div>
+            <input id="gene_filter" type="text" class="form-control col-lg-12" placeholder="Type some chars...">
+            <div class="input-group-prepend">
+                <button id="filter_reset_button" class="btn btn-danger"><i class="fas fa-eraser"></i></button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+{% block left-aside %}
+    {% if batch_list %}
+        <a href="{% url 'batch_del_all' %}" class="bbs-c-row bbs-i-mod-h-fullspace">
+            <button class="btn btn-sm btn-danger bbs-i-mod-h-fullspace"><i style="font-size: 5em; max-height: 120px"
+                                                                           class="fas fa-trash"></i></button>
+        </a>
+    {% endif %}
+{% endblock %}
+{% block main %}
+    <div id="wrapper" class="bbs-c-column bbs-i-mod-h-fullspace">
+        <div id="gene_button_list" class="bbs-c-row bbs-c-mod-wrap bbs-c-mod-justify-content-center">
+            {% for gene in gene_list %}
+                <a href="{% url 'batch_add' gene.id report.id %}">
+                    <button style="min-width: 150px" class="gene_selector btn btn-lg btn-primary m-2
+                {% for batch in batches %}
+                    {% if gene.name == batch.gene.name %}
+                        d-none
+                    {% endif %}
+                {% endfor %}
+                          "
+                            id="gene_add_{{ gene.id }}"
+                            name="{{ gene.name }}"
+                            onclick="hideGene({{ gene.id }})">
+                        {{ gene.name|truncatechars:7 }}
+                    </button>
+                </a>
+            {% endfor %}
+        </div>
+        <div id="batch_list" class="bbs-c-row bbs-c-mod-wrap">
+            {% for batch in batch_list %}
+                <div class="bbs-c-column w-25 pr-3 pl-3">
+                    <div class="input-group bbs-c-row">
+                    <span class="input-group-text bbs-i-mod-grow-1"
+                          style="min-width: 150px;">{{ batch.gene.name }}</span>
+                        <!--div class="bbs-i-mod-grow-1"></div-->
+                        <span class="input-group-text text-center" style="min-width: 30px;"> X </span>
+                        <input id="batch_{{ batch.id }}" type="number" class="form-control" style="max-width: 80px;"
+                               value="{{ batch.quantity }}">
+                        <div class="input-group-append" id="button-addon4">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <!--a href="del/{{ batch.id }}"-->
+                                <a href="{% url 'batch_del' batch.id %}">
+                                    <button type="button" class="btn btn-outline-secondary"><i
+                                            class="fas fa-trash"></i>
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="batch_detail_{{ batch.id }}" class="bbs-c-column bg-secondary mb-1 p-1">
+                        {% include 'cookbook/fragments/batch_card.html' %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
+{% block right-aside %}
+    {% if batch_list %}
+    <a href="{% url 'batch_report_print' report_id=report.id %}" class="bbs-c-row bbs-i-mod-h-fullspace">
+        <button class="btn btn-sm bbs-i-mod-h-fullspace btn-primary" ><i style="font-size: 5em; max-height: 120px" class="fas fa-print"></i></button>
+    </a>
+    <a href="{% url 'batch_report_save' report_id=report.id %}" class="bbs-c-row bbs-i-mod-h-fullspace">
+        <button class="btn btn-sm bbs-i-mod-h-fullspace btn-success" ><i style="font-size: 5em; max-height: 120px" class="fas fa-save"></i></button>
+    </a>
+    {% endif %}
+{% endblock %}
+{% block main-footer %}
+    <a href="{% url 'admin:cookbook_batch_changelist' %}" style="display: flex"
+       class="bbs-c-mod-justify-content-center align-items-center">Edit Genes<i class="fas fa-pencil-alt pl-1"></i></a>
+{% endblock %}
+{% block scripts %}
+    <script>
+        /**
+         function hideGene(id) {
+            var identifier = "#" + "gene_add_" + id;
+            var button = $(identifier)
+            button.toggleClass("d-none");
+        }
+         */
+        function set(id) {
+            var identifier = "#" + 'batch_' + id;
+            var input = $(identifier);
+            var icon = $("#" + "quantity_set_" + id);
+            var batch_detail_div = $("#batch_detail" + "_" + id);
+            console.log(batch_detail_div);
+            //input.load("set/" + id + "/" + input.val());
+            batch_detail_div.load("compute/" + id);
+
+            icon.toggleClass("text-success");
+        }
+
+        $("input[type='number']").change(function () {
+            var id = this.id.replace('batch_', '');
+            console.log(this.value + ' ' + this.id.replace('batch_', ''));
+            $.get("set/" + id + "/" + this.value);
+            var batch_detail_div = $("#batch_detail" + "_" + id);
+            batch_detail_div.load("compute/" + id);
+            }
+        );
+    </script>
+    <script>
+        const gene_filter = $("#gene_filter");
+        const filter_reset = $("#filter_reset_button");
+        const gene_list = $(".gene_selector");
+        gene_filter.keyup(function () {
+            for (item of gene_list) {
+                if (!item.name.toLowerCase().match(gene_filter.val().toLowerCase())) {
+                    $("#" + item.id).hide();
+                } else {
+                    $("#" + item.id).show();
+                }
+            }
+        });
+        filter_reset.click(function () {
+            gene_filter.value = '';
+            for (item of gene_filter) {
+                $("#" + item.id).show();
+            }
+        });
+    </script>
+    <script>
+        $(".accordion").accordion();
+    </script>
+{% endblock %}

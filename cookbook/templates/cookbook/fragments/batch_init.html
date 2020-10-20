@@ -1,0 +1,12 @@
+toto
+<div class="ui-accordion">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+</div>
+{% block scripts %}
+    {{ parent }}
+    <script>
+        $(".accordion").accordion();
+    </script>
+{% endblock %}

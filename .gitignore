@@ -1,2 +1,5 @@
 # Project exclude paths
 /bbs-venv/
+/.idea
+*.pyc
+*.pdf

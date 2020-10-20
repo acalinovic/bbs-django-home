@@ -25,12 +25,12 @@
     <h3>Batch processed</h3>
 {% endblock %}
 {% block left-aside %}
-    <a href="{% url 'batch_report' %}">
-        <button class="btn btn-sm btn-dark m-2">Print</button>
+    <a href="{% url 'batch_index' %}" class="bbs-c-row bbs-i-mod-h-fullspace">
+        <button class="btn btn-sm bbs-i-mod-h-fullspace btn-dark" ><i style="font-size: 5em; max-height: 120px" class="fas fa-caret-square-left"></i></button>
     </a>
 {% endblock %}
 {% block main %}
-    <div id="wrapper" class="bbs-c-row bbs-c-mod-wrap bbs-i-mod-max-grow bbs-c-mod-wrap">
+    <div id="wrapper" class="bbs-c-row bbs-c-mod-wrap bbs-i-mod-max-grow">
         {% for batch, items in batch_items.items %}
             <div class="card container-sm w-50">
                 <div class="card-header font-weight-bold bg-primary text-white ">
@@ -64,6 +64,14 @@
             </div>
         {% endfor %}
     </div>
+{% endblock %}
+{% block right-aside %}
+    <a href="{% url 'batch_report_print' %}" class="bbs-c-row bbs-i-mod-h-fullspace">
+        <button class="btn btn-sm bbs-i-mod-h-fullspace btn-primary" ><i style="font-size: 5em; max-height: 120px" class="fas fa-print"></i></button>
+    </a>
+    <a href="{% url 'batch_report_save' %}" class="bbs-c-row bbs-i-mod-h-fullspace">
+        <button class="btn btn-sm bbs-i-mod-h-fullspace btn-success" ><i style="font-size: 5em; max-height: 120px" class="fas fa-save"></i></button>
+    </a>
 {% endblock %}
 {% block main-footer %}
     <a href="{% url 'admin:cookbook_batch_changelist' %}">admin</a>

@@ -1,5 +1,6 @@
-from . BatchIndex import BatchIndex, batch_process, batch_set_item, batch_report, batch_add, batch_del, batch_set
 from . GeneIndex import GeneIndex
+from . ReportView import ReportView
+from . ReportIndex import ReportIndex
 from django.template.defaulttags import register
 
 

@@ -6,3 +6,4 @@ from .Nature import Nature
 from .Program import Program
 from .Recipe import Recipe
 from .RecipeItem import RecipeItem
+from .Report import Report

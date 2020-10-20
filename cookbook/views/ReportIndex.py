@@ -1,39 +1,42 @@
-"""
 import io
 
 from django.core.files import File
 from django.db.models import Sum
-from django.http import HttpResponse, HttpResponseRedirect, FileResponse
+from django.http import HttpResponseRedirect, HttpResponse, FileResponse
 from django.shortcuts import render
 from django.utils.timezone import now
 from django.views import generic
-from reportlab.lib.colors import black, red
+from reportlab.lib.colors import red, black
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
 
-from cookbook.models import Batch, Gene, BatchItem, Ingredient, RecipeItem, Report
+from cookbook.models import Report, Gene, Batch, BatchItem, RecipeItem, Ingredient
+from cookbook.controllers import BatchController
 
 
-class BatchIndex(generic.ListView):
-    model = Batch
-    ordering = ['gene__name']
+class ReportIndex(generic.TemplateView):
+    template_name = 'cookbook/report_index.html'
 
-    def get_queryset(self, **kwargs):
-        return Batch.objects.exclude(is_backup=True)
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=object_list, **kwargs)
-        context['gene_list'] = Gene.objects.exclude(used_in_batch=True).order_by('name')
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context['report'] = Report.objects.create()
+        context['gene_list'] = Gene.objects.filter(used_in_batch=False)
+        context['batch_list'] = Batch.objects.exclude(is_backup=True)
         return context
 
 
-def batch_add(request, gene_id):
-    new_batch = Batch()
-    new_batch.gene = Gene.objects.get(id=gene_id)
-    new_batch.gene.used_in_batch = True
-    new_batch.gene.save()
-    new_batch.save()
+def batch_render(request, batch_id):
+    context = dict()
+    context['batch'] = BatchController.batch_compute(batch_id)
+    print('batch_render invoked')
+    return render(request, 'cookbook/fragments/batch_card.html', context)
+
+
+def batch_add(request, gene_id, report_id):
+    BatchController.batch_init(Report.objects.get(id=report_id), Gene.objects.get(id=gene_id))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -41,6 +44,7 @@ def batch_set(request, batch_id, value):
     batch = Batch.objects.get(id=batch_id)
     batch.quantity = value
     batch.save()
+    BatchController.batch_compute(batch_id)
     return HttpResponse(value)
 
 
@@ -61,7 +65,9 @@ def batch_del_all(request):
 
 
 def batch_save(request, batch_id):
-    Batch.objects.update(id=batch_id, is_backup=True)
+    batch = Batch.objects.get(id=batch_id)
+    batch.is_backup = True
+    batch.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -107,7 +113,7 @@ def batch_process(request):
     return render(request, 'cookbook/batch_result.html', context)
 
 
-def batch_report():
+def batch_report(report_id: int):
     DEBUG = False
     width, height = A4[0], A4[1]
     top_m, right_m, bottom_m, left_m = 10, 10, 10, 10
@@ -186,17 +192,17 @@ def batch_report():
     p.save()
     buffer.seek(0)
     report_name = 'batch_report_' + str(now()) + '.pdf'
-    batches.first.report.pdf = File(name=report_name, file=buffer)
-    each.save()
-    return {'buffer': buffer, 'filename': report_name}
+    report = Report.objects.get(id=report_id)
+    report.pdf = File(name=report_name, file=buffer)
+    report.save()
+    return report
 
 
-def batch_report_save(request):
-    context = batch_report()
-    return FileResponse(context['buffer'], filename=context['filename'], as_attachment=True)
+def batch_report_save(request, report_id: int):
+    report = batch_report(report_id)
+    return FileResponse(report.pdf, filename=report.pdf.name, as_attachment=True)
 
 
-def batch_report_print(request):
-    context = batch_report()
-    return FileResponse(context['buffer'], filename=context['filename'], as_attachment=False)
-"""
+def batch_report_print(request, report_id: int):
+    report = batch_report(report_id)
+    return FileResponse(report.pdf, filename=report.pdf.name, as_attachment=False)

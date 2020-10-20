@@ -3,8 +3,8 @@ from cookbook.models import Recipe, Ingredient
 
 
 class RecipeItem(models.Model):
-    recipe = models.ForeignKey(Recipe, models.DO_NOTHING, blank=True, null=True)
-    ingredient = models.ForeignKey(Ingredient, models.DO_NOTHING, blank=True, null=True)
+    recipe = models.ForeignKey(Recipe, models.DO_NOTHING, blank=True, null=True, related_name='recipe_items')
+    ingredient = models.ForeignKey(Ingredient, models.DO_NOTHING, blank=True, null=True, related_name='ingredient')
     volume = models.FloatField(blank=True, null=True)
 
     class Meta:

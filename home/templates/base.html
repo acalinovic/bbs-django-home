@@ -29,28 +29,28 @@
     {% endblock %}
 </header>
 <div id="main-wrapper" class="bbs-c-row bbs-i-mod-h-fullspace">
-    <aside id="app-left-aside" class="bbs-c-column bg-info">
+    <aside id="app-left-aside" class="bbs-c-column bbs-c-mod-wrap bbs-c-mod-justify-content-start">
         {% block left-aside %}
             <!--button onclick="to_pdf()" class="button">TO PDF</button-->
         {% endblock %}
     </aside>
     <div id="content-wrapper" class="bbs-c-column bbs-i-mod-h-fullspace">
-        <section id="main-header" class="bbs-c-row">
+        <section id="main-header" class="bbs-c-row bbs-c-mod-justify-content-center">
             {% block main-header %}{% endblock %}
         </section>
         <main id="main-content" class="bbs-c-row bbs-c-mod-wrap bbs-i-mod-h-fullspace bbs-c-mod-justify-content-center">
             {% block main %}toto{% endblock %}
         </main>
-        <section id="main-footer" class="">
+        <section id="main-footer" class="bbs-c-row bbs-c-mod-justify-content-center">
             {% block main-footer %}{% endblock %}
         </section>
     </div>
-    <aside id="app-right-aside" class="bbs-i-mod-fix-grow">
+    <aside id="app-right-aside" class="bbs-c-column bbs-c-mod-wrap bbs-c-mod-justify-content-start">
         {% block right-aside %}{% endblock %}
     </aside>
 </div>
 <footer id="app-footer" class="bbs-c-row fixed-bottom bg-dark text-light bbs-c-mod-justify-content-center">
-    {% block footer %}<p>toto</p>{% endblock %}
+    {% block footer %}{% endblock %}
 </footer>
 
 {% block scripts %}{% endblock %}
